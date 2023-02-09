@@ -227,11 +227,310 @@ And that’s all for our Naming Service contract. In the next section, we will b
 # 2. Contract Deployment
 
 In this section of the tutorial, we will deploy the contract we wrote earlier to the Celo blockchain right from Remix IDE interface. 
-* Compile the code from the Remix interface.
+* Compile the code from the Remix interface. Please ensure you are using the latest compiler version in order for the code to compile properly.
+
+<img width="383" alt="image" src="https://user-images.githubusercontent.com/64266194/217687335-91972d77-c093-40d1-8b61-b8d54d1c27ba.png">
+
 * Ensure you have the Celo extension installed. If you don’t have it, you can search for it from the extensions section and add it to Remix.
+
+<img width="376" alt="image" src="https://user-images.githubusercontent.com/64266194/217686838-1c3294b2-0883-4e9a-88d3-198e0ef71f38.png">
+
 * Click on the “Deploy” button to deploy the contract on the Celo blockchain.
+
+<img width="376" alt="image" src="https://user-images.githubusercontent.com/64266194/217686961-ce0c960e-77ad-4918-a6c7-759d54fa9e09.png">
 
 After deployment, an interface to interact with the contract will appear in the left section of Remix IDE. You can start interacting and testing the contract functionalities from that section.
 
+<img width="376" alt="image" src="https://user-images.githubusercontent.com/64266194/217687071-bbe270b6-0402-4c7e-bef8-e542886a9937.png">
+
 
 # 3. Frontend Development with React
+In this section of the tutorial, we will be building a React frontend for our Naming System and connecting to the Celo blockchain using the **react-celo** library. 
+
+## 3.1 Creating React Boilerplate
+The following steps will guide you to creating a React boilerplate code:
+1. Open your terminal and navigate to any directory of your choice.
+2. Ensure you have Node installed by running the command in your terminal:
+```bash
+node -v
+```
+The command will print out the version of node installed in your computer (If Node has been installed already).
+3. Run the command:
+```bash
+npx create-react-app umbrella-domains
+```
+to create a React boilerplate inside the `umbrella-domains` directory that will be created. You can change the name of the directory to any name of your choice.
+4. Locate `umbrella-domains` folder from your file manager and open it with a code editor. 
+5. Delete all the files and folders we won't be using for this project and you will end up with a similar folder structure to this:
+
+<img width="257" alt="image" src="https://user-images.githubusercontent.com/64266194/217689979-5cd2fa29-d1f2-4782-b6b8-7de707244170.png">
+
+6. Open the `package.json` file and replace the code inside with this:
+
+```json
+{
+  "name": "umbrella-domains",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@celo/contractkit": "^3.2.0",
+    "@celo/react-celo": "^4.3.0",
+    "@chakra-ui/react": "^1.0.0",
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@openzeppelin/contracts": "^4.8.1",
+    "dotenv": "^16.0.3",
+    "framer-motion": "^4.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^3.11.0",
+    "react-scripts": "^4.0.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  }
+}
+```
+We added Chakra-Ui and React-Celo packages which we use later in building the UI and connecting it to the blockchain respectively.
+
+7. Run the command
+```bash
+npm i
+```
+to add download the newly added packages to the `node_modules` folder.
+
+8. Inside the `src` directory, create a folder named `contracts`.
+9. Inside the `contracts` folder, create two files named `ENS.sol` and `ens-abi.json`, and a folder named `libraries`.
+10. Inside the `libraries` folder, create a file named `StringUtils.sol`.
+11. Now return to Remix IDE, copy the code from the files `ENS.sol` and `StringUtils.sol` and paste them inside inside their respective files in your code editor.
+
+## 3.2 Linking Frontend with Celo
+
+Open `index.js` file and add the following code:
+
+```javascript
+import React, { StrictMode } from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import "./index.css"
+import { CeloProvider } from '@celo/react-celo';
+import "@celo/react-celo/lib/styles.css";
+
+ReactDOM.render(
+  <CeloProvider
+    dapp={{
+      name:"Umbrella domains",
+      description:"An ENS on the Celo blockchain",
+      url: "https://example.com"
+    }}
+    connectionModal={{
+      title: <span>Connect your wallet</span>
+    }}
+    >
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </CeloProvider>,
+  document.getElementById("root")
+);
+```
+The code is straight forward. We imported `CeloProvider` from `@celo/react-celo` package we installed earlier. `CeloProvider` is a wallet that we can use to connect and make transactions to the Celo blockchain. We imported the files necessary to style the wallet. We then added some details about our dapp and a message to show before connecting the wallet.
+
+## 3.3 Building the frontend
+
+Open the `App.js` file and add the following code:
+
+```javascript
+import React, { useState, useEffect } from 'react'
+import {
+  ChakraProvider,
+  Button,
+  Flex,
+  Input,
+  Text
+} from "@chakra-ui/react";
+import { useCelo } from '@celo/react-celo';
+import ABI from "./contracts/ens-abi.json"
+import BigNumber from 'bignumber.js';
+
+const contractAddress = "0x00"
+
+const App = () => {
+  const [newDomain, setNewDomain] = useState()
+  const [contract, setContract] = useState()
+  const [searchVal, setSearchVal] = useState()
+  const [searchRes, setSearchRes] = useState()
+  const [domains, setDomains] = useState()
+  const [tx, setTx] = useState()
+
+  const { connect, address, performActions, getConnectedKit } = useCelo()
+
+  const connectWallet = async () => {
+    await connect()
+    window.location.reload()
+  }
+
+  const connection = async () => {
+    const kit = await getConnectedKit()
+    const contract = new kit.connection.web3.eth.Contract(ABI, contractAddress)
+    setContract(contract)
+  }
+
+  const createDomain = async () => {
+    const [name, tld] = newDomain.split(".")
+    const cost = name.length === 2 ? '.1' : name.length === 3 ? '0.05' : name.length === 4 ? '0.03' : '0.01'
+    await performActions(async (kit) => {
+      const { defaultAccount } = kit.connection;
+      try {
+        const _cost = new BigNumber(cost).shiftedBy(18).toString()
+        const tx = await contract.methods.setName(name, tld).send({ from: defaultAccount, value: _cost })
+        setTx(tx)
+        alert("Create domain successfully")
+      } catch (e) {
+        console.log(e)
+      }
+    })
+  }
+
+  const searchDomain = async () => {
+    const tld = searchVal[1]
+    const name = searchVal[0]
+    try {
+      const address = await contract.methods.getAddress(tld, name).call()
+      setSearchRes(address)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const allCreatedDomains = async () => {
+    try {
+      const domains = await contract.methods.getAllNames().call()
+      setDomains(domains)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
+  useEffect(() => {
+    connection()
+    allCreatedDomains()
+  }, [])
+
+  useEffect(() => {
+    allCreatedDomains();
+  }, [tx, contract])
+
+...
+```
+A breakdown of the code snippet above is as follows:
+
+* We first included all the necessary imports for the file.
+    * We imported the React library
+    * We import the components we will need from Chakra-UI library
+    * We imported `use-celo` from React-Celo package
+    * We also import the smart contract ABI (Application Binary Inferface) from the file we created and added it in earlier in the tutorial
+    * Lastly, we imported the BigNumber class to handle large numbers JavaScript can't handle
+
+* We also created a variable called `contractAddress`. This variable stores the address our contract was deployed to. You can get the contract directly from Remix after the contract deployment is completed.
+
+<img width="315" alt="image" src="https://user-images.githubusercontent.com/64266194/217706176-c399e2ff-faf5-41ab-9de1-d91eb2f093dd.png">
+
+* Next, we created a React component called `App` which will contains most of the code for our frontend. 
+    * Inside the `App` component, we first created all the states that needs to be tracked. This was made possible using a React hook called `useState()`.       React comes built-in with a lot of hooks among which are `useEffect()`, `useReducer()`, and `useRef()`. `useEffect()` provides us with a function         and a variable. The function provided is used to update the state of the variable.
+    * We also import some functions and objects from `useCelo` which allows us to utilize the functionalities Celo blockchain provides.
+* The remaining parts of the code snippet contains all the functions we will be using in the dapp. Below is a brief explanation of what the functions do:
+    * `connectWallet()` - This function utilizes the `connect()` function provided by `useCelo()` to connect the Celo Wallet to our dapp
+    * `connection()` - Creates a contract object using the ABI and contract address of our smart contract. It then stores the value into the `contract`          variable we created earlier.
+    * `createDomain()` - This function creates a Name from what the user entered and adds it to the blockchain. It first splits the name from the top-           level domain, it then computes the const of adding the name to our contract. Finally, it calls the `setName()` method of our contract passing in the       necessary value and then send the transaction along with the cost of creating the Name.
+    * `searchDomain()` - This function checks and returns the address of a corresponding Name from the smart contract.
+    * `allCreatedDomains()` - This function returns all names ever created and stored in the contract and save it to the `domains` variable.
+    * Lastly, we have the `useEffect()` hooks that executes some function when some certain conditions are met i.e when the values inside the                   `useEffect()` array changes.
+ 
+Now, let's add the last part of our `App` component which will render whatever is displayed in the UI.
+
+```javascript
+  return (
+    <ChakraProvider>
+      {address ?
+        <Flex direction={"column"} align="center" w="100vw" minH="100vh" gap={"20px"}>
+          <Text>Connected to {address}</Text>
+          <Flex direction={"column"} w="500px" bgColor={"gray.200"} mt="50px" p={"30px"}>
+            <Text>Search for domain names</Text>
+            <Flex mb="10px" mt={"15px"} gap="10px">
+              <Input onChange={e => setSearchVal(e.target.value.split("."))} outline={"1px solid blue"} fontWeight="700"></Input>
+              <Button onClick={searchDomain}>Search</Button>
+            </Flex>
+            <Input outline={"1px solid blue"} disabled fontWeight={"700"} value={searchRes}></Input>
+          </Flex>
+          <Flex direction={"column"} w="500px" bgColor={"gray.300"} p="25px" borderRadius="3px">
+            <Text>Create domain name</Text>
+            <Flex mt={"10px"} gap="10px">
+              <Input value={newDomain} onChange={e => setNewDomain(e.target.value)} fontFamily="monospace"></Input>
+              <Button onClick={createDomain}>Create</Button>
+            </Flex>
+          </Flex>
+          <Flex mt="50px" direction='column'>
+            <Text fontWeight={"bold"} textDecor="underline" fontSize={"2xl"}>Domains created so far</Text>
+            <Flex direction={"column"}>
+              {domains?.map(domain =>
+                <Text fontFamily={"monospace"} fontSize="15px">{domain}</Text>
+              )}
+            </Flex>
+          </Flex>
+        </Flex> :
+        <Flex w={"100vw"} h={"100vh"} align="center" justify={"center"}>Please{" "}<Button onClick={connectWallet}>Connect</Button> "Celo Extension Wallet" to use this dapp</Flex>
+      }
+    </ChakraProvider>
+  )
+```
+This part of the `App` component is pretty straight forward. We wrapped the whole section inside `ChakraProvider` so that we can other Chakra-Ui components our app. We first confirm if thehe  address is set, and then proceed to display the UI with all it's component. And it the address is not set, we display a UI that allows the users to connect thier wallet to our dapp by utilizing the `connect()` function provided by `useCelo()`.
+
+The other part code builds the page layout and added some styling using Chakra-UI.
+
+The last part of the file exports the `App()` component so it can be assessible from outside the file.
+
+## 3.4 Testing the Dapp
+By now, our frontend code for the Naming System app is complete and can now be tested.
+Navigate to the terminal in the same directory where you created the React app (`umbrella-domains` in our case) and run the command to start the app:
+```bash
+npm start
+```
+This command will run the server on a port which can be accessed from your browser.
+
+<img width="1680" alt="image" src="https://user-images.githubusercontent.com/64266194/217715732-19617626-f60c-473c-bdf7-cfd8a083bcc9.png">
+
+From your browser you can now:
+    * Search for address of existing names
+    * Create new names
+    * View all names created and saved in the contract.
+    
+ # 4. Conclusion
+ This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point in time in order to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your own amazing projects on the Celo blockchain and ship it out for users to interract with it. Check our the [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
+
+The code for this tutorial can be found in this [repository](https://github.com/princeibs/celo-101-tut-code)
