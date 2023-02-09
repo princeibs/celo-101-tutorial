@@ -326,7 +326,10 @@ to add download the newly added packages to the `node_modules` folder.
 8. Inside the `src` directory, create a folder named `contracts`.
 9. Inside the `contracts` folder, create two files named `ENS.sol` and `ens-abi.json`, and a folder named `libraries`.
 10. Inside the `libraries` folder, create a file named `StringUtils.sol`.
-11. Now return to Remix IDE, copy the code from the files `ENS.sol` and `StringUtils.sol` and paste them inside inside their respective files in your code editor.
+11. Now return to Remix IDE, copy the code from the files `ENS.sol` and `StringUtils.sol` and paste them inside inside their respective files in your code editor. Also copy the contract ABI from Remix IDE and paste it in `ens-abi.json`. To copy the ABI from Remix, click on the copy icon and it will be copied to your clipboard.
+
+<img width="396" alt="image" src="https://user-images.githubusercontent.com/64266194/217741293-ff9a3df8-7397-4e2b-beef-9f9ffc750d87.png">
+
 
 ## 3.2 Linking Frontend with Celo
 
@@ -534,3 +537,7 @@ From your browser you can now:
  This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point in time in order to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your own amazing projects on the Celo blockchain and ship it out for users to interract with it. Check our the [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
 
 The code for this tutorial can be found in this [repository](https://github.com/princeibs/celo-101-tut-code)
+
+# 5. Author
+Ibrahim Suleiman is a software developer who loves to share his knowledge and experience of software development through technical writing and open source. You can reach out him on [Twitter](https://twitter.com/prince_ibs) if you have any more questions about this tutorial.
+
