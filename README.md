@@ -1,26 +1,45 @@
-# Building a Naming System on the Celo Blockchain using React and react-celo Library
+# Building a Naming System on the Celo Blockchain Using React and React-Celo Library
 
 ## Introduction 
-The recent exponential growth of the Web3 and blockchain ecosystem has lead to the increase in its user and developer base. A lot of users already accustomed to the traditional Web2 ecosystem and trying out the Web3 ecosystem for the first time usually get’s overwhelmed by the complexities involved in the space. While it is a fact that these complexities are put in place to ensure the space is secured, new users in the space mostly finds it hard to adapt. One of the pain point for new users is wallet management. Each wallet has a set of addresses, and the addresses are usually long random sequence of characters. The fact that they are long and random is what makes hard to deal with. Several solutions have tried to tackle this problem but the most prominent solution is the Naming Service.
+The recent exponential growth of the Web3 and blockchain ecosystem has lead to the increase in its user and developer base. A lot of users already accustomed to the traditional Web2 ecosystem and trying out the Web3 ecosystem for the first time usually get’s overwhelmed by the complexities involved in the space. While it is a fact that these complexities are put in place to ensure the space is secured, new users in the space mostly finds it hard to adapt. 
 
-The Naming System, similar to DNS (Domain Name Service) is a system that maps wallet addresses to a unique name of your choice. So if you want to send funds to a user who is registered on the Naming Service, you don’t need to go through the hassle of typing the user’s long and cumbersome wallet address. You can simply enter the user’s unique name on the Naming Service and it will resolve to the user’s wallet address. Example of names on the Naming System are `wallet.eth`, `me.crypto` etc.
+One of the pain point for new users is wallet management. Each wallet has a set of addresses, and the addresses are usually long random sequence of characters. The fact that they are long and random is what makes hard to deal with. Several solutions have tried to tackle this problem but the most prominent solution is the Naming Service.
+
+The Naming System, similar to  Domain Name Service(DNS)  is a system that maps wallet addresses to a unique name of your choice. So if you want to send funds to a user who is registered on the Naming Service, you don’t need to go through the hassle of typing the user’s long and cumbersome wallet address. You can simply enter the user’s unique name on the Naming Service and it will resolve to the user’s wallet address. Example of names on the Naming System are `wallet.eth`, `me.crypto` etc.
+
+# Table of Contents
+- [Building a Naming System on the Celo Blockchain using React and react-celo Library](#building-a-naming-system-on-the-celo-blockchain-using-react-and-react-celo-library)
+  * [Introduction](#introduction)
+  * [Learning Objective](#learning-objective)
+  * [Tech Stack](#tech-stack)
+  * [Prerequisites](#prerequisites)
+  * [1. Smart Contract Development](#1-smart-contract-development)
+- [2. Contract Deployment](#2-contract-deployment)
+- [3. Frontend Development with React](#3-frontend-development-with-react)
+  * [3.1 Creating React Boilerplate](#31-creating-react-boilerplate)
+  * [3.2 Linking Frontend with Celo](#32-linking-frontend-with-celo)
+  * [3.3 Building the frontend](#33-building-the-frontend)
+  * [3.4 Testing the Dapp](#34-testing-the-dapp)
+- [4. Conclusion](#4-conclusion)
+- [5. Author](#5-author)
 
 ## Learning Objective
-In this tutorial we will be learning how to build a Naming System on the Celo blockchain. What you will learn in this tutorial are as follows:
-- Learn how to write the smart contract for the Naming System using Solidity
-- Learn how to deploy smart contracts on the Celo blockchain
-- Learn how to build a React frontend for your app
-- Learn how to integrate the `react-celo` library in your React frontend
+In this tutorial, we will be learning how to build a Naming System on the Celo blockchain. What you will learn in this tutorial are as follows:
+- Learn how to write the smart contract for the Naming System using Solidity.
+- Learn how to deploy smart contracts on the Celo blockchain.
+- Learn how to build a React frontend for your app.
+- Learn how to integrate the `react-celo` library in your React frontend.
 
 ## Tech Stack
 We will use the following tools and languages in this tutorial
-1. Remix IDE
-2. VSCode
+1. [Remix IDE](remix.ethereum.org)
+2. [VSCode](https://code.visualstudio.com/)
 3. A web browser
-4. Solidity
-5. React
-6. `react-celo` 
-7. Chakra-UI
+4. [Solidity](https://docs.soliditylang.org/)
+5. [React](https://reactjs.org/)
+6. [`react-celo`](https://github.com/celo-org/react-celo)
+7. [Chakra-UI](https://chakra-ui.com/)
+8. [Celo Extension Wallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh?hl=en)
 
 ## Prerequisites
 - Basics of programming with JavaScript and it’s frontend libraries like React, Vue, or Angular
@@ -35,11 +54,11 @@ The first step is to navigate to the Remix IDE [website](https://remix.ethereum.
 <img width="1392" alt="remix-capture" src="https://user-images.githubusercontent.com/64266194/217634292-1792e55b-89fc-4c82-94cb-2a3f81a7ecfd.png">
 
 Follow the steps below to get Remix IDE setup for writing our smart contracts:
-- Create a new file named `ENS.sol` in the `contracts` folder or any folder of your choice.
-- On the same you created `ENS.sol`, create another sub-folder and name it `libraries`.
-- Inside the `library` sub-folder, Create a file and name it `StringUtils.sol`. The purpose of this file will be explained later in the tutorial.
+1. Create a new file named `ENS.sol` in the `contracts` folder or any folder of your choice.
+2. On the same you created `ENS.sol`, create another sub-folder and name it `libraries`.
+3. Inside the `library` sub-folder, Create a file and name it `StringUtils.sol`. The purpose of this file will be explained later in the tutorial.
 
-At this point you have two files open in your Remix editor - `ENS.sol` and `StringUtils.sol`. In the step is to add the necessary smart contracts to these files.
+At this point you have two files open in your Remix editor - `ENS.sol` and `StringUtils.sol`. The next step is to add the necessary smart contracts to these files.
 
 * `StringUtils.sol`
 Open the `StringUtils.sol` file and paste the following code:
@@ -82,7 +101,7 @@ library StringUtils {
 }
 ```
 
-The code snippet above is a library we created which will be used to check the length of the names in our Naming System so they can be validated. You don’t need to know about the details of the code at this point as it contains more high-level concepts and not our focus for this tutorial.
+The code snippet above is a library we created, which will be used to check the length of the names in our Naming System so they can be validated. You don’t need to know about the details of the code at this point as it contains more high-level concepts and not our focus for this tutorial.
 
 
 * `ENS.sol`
@@ -97,10 +116,10 @@ import {StringUtils} from "./libraries/StringUtils.sol";
 
 contract ENS {}
 ``` 
-* The first line of the code snippet above defines the license of our smart contract. For this contract, we will be using the *UNLICENSE* keyword. Using this keyword for the licence field of our contract means the contract is open to everyone and it is not guided by any licence. Check out [Solidity docs](https://docs.soliditylang.org/en/v0.8.17/layout-of-source-files.html#spdx-license-identifier) and [SPDX website](https://spdx.dev) to learn more about licensing.
-* The second line defines the version of Solidity compiler we will be using for our contract. In the case of our contract, we will be using any compiler version starting from 0.8.10 to 0.8.x (where x is greater than 10).
+* The first line of the code snippet above defines the license of our smart contract. For this contract, we will use the *UNLICENSE* keyword. Using this keyword for the licence field of our contract means the contract is open to everyone and it is not guided by any licence. Check out [Solidity docs](https://docs.soliditylang.org/en/v0.8.17/layout-of-source-files.html#spdx-license-identifier) and [SPDX website](https://spdx.dev) to learn more about licensing.
+* The second line defines the version of Solidity compiler we will use for our contract. In the case of our contract, we will be use any compiler version starting from 0.8.10 to 0.8.x (where x is greater than 10).
 * The third line of code is an import statement that imports the contract in `StringUtils.sol` file we created earlier.
-* The next line is the smart contract definition. Solidity is an object-oriented and a curly bracket language just like Java and C++, that’s the reason why their constructs look similar. From the code, we are creating a contract with the name `ENS`. This name can be anything you wish to use, but for this tutorial, that is what we will be using.
+* The next line is the smart contract definition. Solidity is an object-oriented and a curly bracket language just like [Java](https://www.java.com/) and [C++](https://en.wikipedia.org/wiki/C%2B%2B), that’s the reason why their constructs look similar. From the code, we are creating a contract with the name `ENS`. This name can be anything you wish to use, but for this tutorial, that is what we will use.
 
 Now let’s add some code inside the body of our smart contract.
 
@@ -133,7 +152,7 @@ Now let’s add some code inside the body of our smart contract.
 ```
 * In the first line we created a variable named `owner`. It will store the address of the owner of the contract and give administrative privileges to the address only. We added the `immutable` modifier to indicate that the address can only be set one time - construction time.
 * We also created a mapping named `register`. This mapping will map the unique names to their respective addresses. It is a very important aspect of our Naming System as this is where all the names are linked to their respective addresses.
-* We also created an array named `names` which will be used to store all the names we have been created in the Naming System. The reason for this variable is because mappings in solidity are not iterable. This implies that we cannot access all the keys that has been assigned a value from the mapping. We can only access them one at a time.
+* We also created an array named `names` which will be used to store all the names we created in the Naming System. The reason for this variable is because mappings in solidity are not iterable. This implies that we cannot access all the keys that has been assigned a value from the mapping. We can only access them one at a time.
 * In the next two lines, we created events named `RegisterName` and `UpdateData`  to be emitted on the event of some actions.
 * The error statements defined in the next lines does the following:
     * `error NameAlreadyExists()` - is thrown when the name entered into the smart contract has already been claimed by another user.
@@ -168,9 +187,9 @@ Let’s add the functionalities of our Naming System contract in the next step. 
 ```
 The code snippet above contains two functions: `cost(string calldata name)` and `validName(string calldata name)`
 * `cost(string calldata name)` takes in the name to be used for the Naming System and determine the the cost of using the name based on it’s length. The function first validates the name before returning the amount in eth of using the name.
-* `validName(string calldata name)`  checks and validates the length of a name. It returns a boolean indicating whether a name is valid or not.
+* `validName(string calldata name)` checks and validates the length of a name. It returns a boolean indicating whether a name is valid or not.
 
-Let’s add some more functions to the contract: 
+Let’s add more functions to the contract: 
 
 ```solidity
     // Add new name to the register
@@ -197,7 +216,7 @@ The above code snippet contains two functions: `setName(string calldata _name, s
 * `setName(string calldata _name, string calldata _tld)`
     * This function starts by getting the cost of a new name and store it in the `nameCost` variable.
     * It then proceeds to validate the name entered, the amount sent, and the address to be assigned to the name.
-    * The next lines of code concatenates both the top-level name and the custom name together and store in the `domain` variable. Maps the user’s wallet address to the name and add the name to the array of existing names. Adding all created names to an array will let the frontend be able to check all assigned names.
+    * The next lines of code concatenates both the top-level name and the custom name together and store the result in the `domain` variable. Maps the user’s wallet address to the name and add the name to the array of existing names. Adding all created names to an array will let the frontend be able to check all assigned names.
     * The last line of the function emitted the `RegisterName` event created earlier. Event’s like this can be used to notify the frontend about activities occurring in the contract.
 * `getAddress(string calldata _tld, string calldata _name)` 
     * A getter function used to retrieve the wallet address associated with a name.
@@ -231,7 +250,7 @@ In this section of the tutorial, we will deploy the contract we wrote earlier to
 
 <img width="383" alt="image" src="https://user-images.githubusercontent.com/64266194/217687335-91972d77-c093-40d1-8b61-b8d54d1c27ba.png">
 
-* Ensure you have the Celo extension installed. If you don’t have it, you can search for it from the extensions section and add it to Remix.
+* Ensure you have the Celo Extension Wallet installed. If you don’t have it, you can search for it from the extensions section and add it to Remix.
 
 <img width="376" alt="image" src="https://user-images.githubusercontent.com/64266194/217686838-1c3294b2-0883-4e9a-88d3-198e0ef71f38.png">
 
@@ -315,7 +334,7 @@ to create a React boilerplate inside the `umbrella-domains` directory that will 
   }
 }
 ```
-We added Chakra-Ui and React-Celo packages which we use later in building the UI and connecting it to the blockchain respectively.
+We added Chakra-UI and React-Celo packages which we use later in building the UI and connecting it to the blockchain respectively.
 
 7. Run the command
 ```bash
@@ -465,12 +484,12 @@ A breakdown of the code snippet above is as follows:
 <img width="315" alt="image" src="https://user-images.githubusercontent.com/64266194/217706176-c399e2ff-faf5-41ab-9de1-d91eb2f093dd.png">
 
 * Next, we created a React component called `App` which will contains most of the code for our frontend. 
-    * Inside the `App` component, we first created all the states that needs to be tracked. This was made possible using a React hook called `useState()`.       React comes built-in with a lot of hooks among which are `useEffect()`, `useReducer()`, and `useRef()`. `useEffect()` provides us with a function         and a variable. The function provided is used to update the state of the variable.
+    * Inside the `App` component, we first created all the states that needs to be tracked. This was made possible using a [React hook](https://reactjs.org/docs/hooks-overview.html)  called `useState()`. React comes built-in with a lot of hooks among which are `useEffect()`, `useReducer()`, and `useRef()`. `useEffect()` provides us with a function and a variable. The function provided is used to update the state of the variable.
     * We also import some functions and objects from `useCelo` which allows us to utilize the functionalities Celo blockchain provides.
 * The remaining parts of the code snippet contains all the functions we will be using in the dapp. Below is a brief explanation of what the functions do:
     * `connectWallet()` - This function utilizes the `connect()` function provided by `useCelo()` to connect the Celo Wallet to our dapp
     * `connection()` - Creates a contract object using the ABI and contract address of our smart contract. It then stores the value into the `contract`          variable we created earlier.
-    * `createDomain()` - This function creates a Name from what the user entered and adds it to the blockchain. It first splits the name from the top-           level domain, it then computes the const of adding the name to our contract. Finally, it calls the `setName()` method of our contract passing in the       necessary value and then send the transaction along with the cost of creating the Name.
+    * `createDomain()` - This function creates a Name from what the user entered and adds it to the blockchain. It first splits the name from the top-level domain, it then computes the const of adding the name to our contract. Finally, it calls the `setName()` method of our contract passing in the necessary value and then send the transaction along with the cost of creating the Name.
     * `searchDomain()` - This function checks and returns the address of a corresponding Name from the smart contract.
     * `allCreatedDomains()` - This function returns all names ever created and stored in the contract and save it to the `domains` variable.
     * Lastly, we have the `useEffect()` hooks that executes some function when some certain conditions are met i.e when the values inside the                   `useEffect()` array changes.
@@ -512,7 +531,7 @@ Now, let's add the last part of our `App` component which will render whatever i
     </ChakraProvider>
   )
 ```
-This part of the `App` component is pretty straight forward. We wrapped the whole section inside `ChakraProvider` so that we can other Chakra-Ui components our app. We first confirm if thehe  address is set, and then proceed to display the UI with all it's component. And it the address is not set, we display a UI that allows the users to connect thier wallet to our dapp by utilizing the `connect()` function provided by `useCelo()`.
+This part of the `App` component is pretty straight forward. We wrapped the whole section inside `ChakraProvider` so that we can other Chakra-UI components our app. We first confirm if thehe  address is set, and then proceed to display the UI with all it's component. And if the address is not set, we display a UI that allows the users to connect thier wallet to our dapp by utilizing the `connect()` function provided by `useCelo()`.
 
 The other part code builds the page layout and added some styling using Chakra-UI.
 
@@ -534,7 +553,7 @@ From your browser you can now:
     * View all names created and saved in the contract.
     
  # 4. Conclusion
- This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point in time in order to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your own amazing projects on the Celo blockchain and ship it out for users to interract with it. Check our the [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
+ This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point in time in order to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your own amazing projects on the Celo blockchain and ship it out for users to interract with it. Check the [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
 
 The code for this tutorial can be found in this [repository](https://github.com/princeibs/celo-101-tut-code)
 
