@@ -1,12 +1,12 @@
 # Building a Naming System on the Celo Blockchain using React and react-celo Library
 
 ## Introduction 
-The recent exponential growth of the Web3 and blockchain ecosystem has lead to the increase in its user and developer base. A lot of users already accustomed to the traditional Web2 ecosystem and trying out the Web3 ecosystem for the first time usually get’s overwhelmed by the complexities involved in the space. While it is a fact that these complexities are put in place to ensure the space is secured, new users in the space mostly finds it hard to adapt. One of the pain point for new users is wallet management. Each wallet has a set of addresses, and the addresses are usually long random sequence of characters. The fact that they are long and random is what makes hard to deal with. Several solutions have tried to tackle this problem but the most prominent solution is the Naming Service.
+The recent exponential growth of the Web3 and blockchain ecosystem has led to an increase in its user and developer base. A lot of users already accustomed to the traditional Web2 ecosystem and trying out the Web3 ecosystem for the first time usually get overwhelmed by the complexities involved in the space. While it is a fact that these complexities are put in place to ensure the space is secured, new users in the space mostly find it hard to adapt. One of the pain points for new users is wallet management. Each wallet has a set of addresses, and the addresses are usually a long random sequence of characters. The fact that they are long and random is what makes them hard to deal with. Several solutions have been tried to tackle this problem but the most prominent solution is the Naming Service.
 
-The Naming System, similar to DNS (Domain Name Service) is a system that maps wallet addresses to a unique name of your choice. So if you want to send funds to a user who is registered on the Naming Service, you don’t need to go through the hassle of typing the user’s long and cumbersome wallet address. You can simply enter the user’s unique name on the Naming Service and it will resolve to the user’s wallet address. Example of names on the Naming System are `wallet.eth`, `me.crypto` etc.
+The Naming System, similar to DNS (Domain Name Service) is a system that maps wallet addresses to a unique name of your choice. So if you want to send funds to a user who is registered on the Naming Service, you don’t need to go through the hassle of typing the user’s long and cumbersome wallet address. You can simply enter the user’s unique name on the Naming Service and it will resolve to the user’s wallet address. Examples of names on the Naming System are `wallet.eth`, `me.crypto` etc.
 
 ## Learning Objective
-In this tutorial we will be learning how to build a Naming System on the Celo blockchain. What you will learn in this tutorial are as follows:
+In this tutorial, we will be learning how to build a Naming System on the Celo blockchain. What you will learn in this tutorial is as follows:
 - Learn how to write the smart contract for the Naming System using Solidity
 - Learn how to deploy smart contracts on the Celo blockchain
 - Learn how to build a React frontend for your app
@@ -23,23 +23,23 @@ We will use the following tools and languages in this tutorial
 7. Chakra-UI
 
 ## Prerequisites
-- Basics of programming with JavaScript and it’s frontend libraries like React, Vue, or Angular
+- Basics of programming with JavaScript and its frontend libraries like React, Vue, or Angular
 - Basic knowledge of programming with Solidity
 - Basic knowledge of using the command line
 - Basic knowledge of Web3 and how wallets work
 
 # 1. Smart Contract Development
 In this section of this tutorial, we will be developing the smart contract for the Naming System.
-The first step is to navigate to the Remix IDE [website](https://remix.ethereum.org) because we will be using Remix IDE to write and deploy our smart contract to the Celo blockchain. When you open the Remix IDE website, it looks like this at first:
+The first step is to navigate to the Remix IDE [website](https://remix.ethereum.org) because we will be using Remix IDE to write and deploy our smart contract to the Celo blockchain.  When you open the Remix IDE website, it looks like this at first:
 
 <img width="1392" alt="remix-capture" src="https://user-images.githubusercontent.com/64266194/217634292-1792e55b-89fc-4c82-94cb-2a3f81a7ecfd.png">
 
 Follow the steps below to get Remix IDE setup for writing our smart contracts:
 - Create a new file named `ENS.sol` in the `contracts` folder or any folder of your choice.
-- On the same you created `ENS.sol`, create another sub-folder and name it `libraries`.
+- On the same you created `ENS.sol`, create another sub-folder, and name it `libraries`.
 - Inside the `library` sub-folder, Create a file and name it `StringUtils.sol`. The purpose of this file will be explained later in the tutorial.
 
-At this point you have two files open in your Remix editor - `ENS.sol` and `StringUtils.sol`. In the step is to add the necessary smart contracts to these files.
+At this point, you have two files open in your Remix editor - `ENS.sol` and `StringUtils.sol`. This step is to add the necessary smart contracts to these files.
 
 * `StringUtils.sol`
 
@@ -134,20 +134,20 @@ Now let’s add some code inside the body of our smart contract.
 ```
 * In the first line we created a variable named `owner`. It will store the address of the owner of the contract and give administrative privileges to the address only. We added the `immutable` modifier to indicate that the address can only be set one time - construction time.
 * We also created a mapping named `register`. This mapping will map the unique names to their respective addresses. It is a very important aspect of our Naming System as this is where all the names are linked to their respective addresses.
-* We also created an array named `names` which will be used to store all the names we have been created in the Naming System. The reason for this variable is because mappings in solidity are not iterable. This implies that we cannot access all the keys that has been assigned a value from the mapping. We can only access them one at a time.
-* In the next two lines, we created events named `RegisterName` and `UpdateData`  to be emitted on the event of some actions.
-* The error statements defined in the next lines does the following:
+* We also created an array named `names` which will be used to store all the names we have created in the Naming System. The reason for this variable is that mappings in solidity are not iterable. This implies that we cannot access all the keys that have been assigned a value from the mapping. We can only access them one at a time.
+* In the next two lines, we created events named `RegisterName` and `UpdateData`  to be emitted in the event of some actions.
+* The error statements defined in the next lines do the following:
     * `error NameAlreadyExists()` - is thrown when the name entered into the smart contract has already been claimed by another user.
-    * `error Unauthorized()` - is thrown when an unauthorised user tried to access a function. 
+    * `error Unauthorized()` - is thrown when an unauthorized user tried to access a function. 
     * `error InvalidName()` - is thrown when the user entered an invalid name.
-    * `error InvalidFunds()` - is thrown when the funds send to a function is invalid.
-* The modifier `onlyOwner` is added to the any function to restrict that function access to the owner.
-* The expression inside the constructor get’s the contract deployer and assign to the `owner` variable.
+    * `error InvalidFunds()` - is thrown when the funds send to a function are invalid.
+* The modifier `onlyOwner` is added to any function to restrict that function's access to the owner.
+* The expression inside the constructor gets the contract deployer and assign it to the `owner` variable.
 
-Let’s add the functionalities of our Naming System contract in the next step. Add the following code snippet below constructor function.
+Let’s add the functionalities of our Naming System contract in the next step. Add the following code snippet below the constructor function.
 
 ```solidity
-   // Calculate the cost for creating domain names
+   // Calculate the cost of creating domain names
     function cost(string calldata name) private pure returns (uint) {
         uint len = StringUtils.strlen(name);
         require(len > 0);
@@ -449,8 +449,6 @@ const App = () => {
   useEffect(() => {
     allCreatedDomains();
   }, [tx, contract])
-
-...
 ```
 A breakdown of the code snippet above is as follows:
 
@@ -513,11 +511,11 @@ Now, let's add the last part of our `App` component which will render whatever i
     </ChakraProvider>
   )
 ```
-This part of the `App` component is pretty straight forward. We wrapped the whole section inside `ChakraProvider` so that we can other Chakra-Ui components our app. We first confirm if thehe  address is set, and then proceed to display the UI with all it's component. And it the address is not set, we display a UI that allows the users to connect thier wallet to our dapp by utilizing the `connect()` function provided by `useCelo()`.
+This part of the `App` component is pretty straightforward. We wrapped the whole section inside `ChakraProvider` so that we can other Chakra-Ui components our app. We first confirm if the address is set, and then proceed to display the UI with all it's components. And if the address is not set, we display a UI that allows the users to connect their wallet to our dapp by utilizing the `connect()` function provided by `useCelo()`.
 
 The other part code builds the page layout and added some styling using Chakra-UI.
 
-The last part of the file exports the `App()` component so it can be assessible from outside the file.
+The last part of the file exports the `App()` component so it can be accessible from outside the file.
 
 ## 3.4 Testing the Dapp
 By now, our frontend code for the Naming System app is complete and can now be tested.
@@ -525,20 +523,19 @@ Navigate to the terminal in the same directory where you created the React app (
 ```bash
 npm start
 ```
-This command will run the server on a port which can be accessed from your browser.
+This command will run the server on a port that can be accessed from your browser.
 
 <img width="1680" alt="image" src="https://user-images.githubusercontent.com/64266194/217715732-19617626-f60c-473c-bdf7-cfd8a083bcc9.png">
 
 From your browser you can now:
-    * Search for address of existing names
-    * Create new names
-    * View all names created and saved in the contract.
+    - Search for address of existing names
+    - Create new names
+    - View all names created and saved in the contract.
     
  # 4. Conclusion
- This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point in time in order to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your own amazing projects on the Celo blockchain and ship it out for users to interract with it. Check our the [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
+ This tutorial laid a foundation of writing smart contracts and deploying on the Celo blockchain. We also solved a real life problem using the blockchain, which is what the ecosystem needs at this point to get more users in it. With the knowledge gained in this tutorial, you can use it as a starting point to build your amazing projects on the Celo blockchain and ship it out for users to interact with it. Check our [Celo documentation](https://docs.celo.org) to learn more about the amazing technology and how you can build amazing projects with it.
 
 The code for this tutorial can be found in this [repository](https://github.com/princeibs/celo-101-tut-code)
 
 # 5. Author
-Ibrahim Suleiman is a software developer who loves to share his knowledge and experience of software development through technical writing and open source. You can reach out him on [Twitter](https://twitter.com/prince_ibs) if you have any more questions about this tutorial.
-
+Ibrahim Suleiman is a software developer who loves to share his knowledge and experience in software development through technical writing and open source. You can reach out to him on [Twitter](https://twitter.com/prince_ibs) if you have any more questions about this tutorial.
