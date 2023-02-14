@@ -28,9 +28,9 @@ We will use the following tools and languages in this tutorial
 - Basic knowledge of using the command line
 - Basic knowledge of Web3 and how wallets work
 
-## 1. Smart Contract Development
+# 1. Smart Contract Development
 In this section of this tutorial, we will be developing the smart contract for the Naming System.
-The first step is to navigate to the Remix IDE [website](https://remix.ethereum.org) because we will be using Remix IDE to write and deploy our smart contract to the Celo blockchain.  When you open the Remix IDE website, it looks like this at first:
+The first step is to navigate to the Remix IDE [website](https://remix.ethereum.org) because we will be using Remix IDE to write and deploy our smart contract to the Celo blockchain. When you open the Remix IDE website, it looks like this at first:
 
 <img width="1392" alt="remix-capture" src="https://user-images.githubusercontent.com/64266194/217634292-1792e55b-89fc-4c82-94cb-2a3f81a7ecfd.png">
 
@@ -42,6 +42,7 @@ Follow the steps below to get Remix IDE setup for writing our smart contracts:
 At this point you have two files open in your Remix editor - `ENS.sol` and `StringUtils.sol`. In the step is to add the necessary smart contracts to these files.
 
 * `StringUtils.sol`
+
 Open the `StringUtils.sol` file and paste the following code:
 
 ```solidity
@@ -139,7 +140,7 @@ Now let’s add some code inside the body of our smart contract.
     * `error NameAlreadyExists()` - is thrown when the name entered into the smart contract has already been claimed by another user.
     * `error Unauthorized()` - is thrown when an unauthorised user tried to access a function. 
     * `error InvalidName()` - is thrown when the user entered an invalid name.
-    * `error InvalidFunds() - is thrown when the funds send to a function is invalid.
+    * `error InvalidFunds()` - is thrown when the funds send to a function is invalid.
 * The modifier `onlyOwner` is added to the any function to restrict that function access to the owner.
 * The expression inside the constructor get’s the contract deployer and assign to the `owner` variable.
 
